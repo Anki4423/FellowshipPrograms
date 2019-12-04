@@ -1,5 +1,11 @@
-// PROGRAM TO FIND ROOT OF EQUATION
+
 <?php
+/**
+ * @author:Ankita dudhe
+ * summary:calculate roots of quadratic equation
+ * @globlaltype :$a,$b,$c,$delta
+ * @method:quadratic()
+ */
 function quadratic()
 {
     echo "a=";

@@ -1,5 +1,12 @@
-// PROGRAM TO FIND DISTANCE FROM THE POINT
+
 <?php 
+/**
+ * @description find the distance using sqrt()
+ * @
+ * @globaltype:$distance,$x,$y
+ *  */ 
+// PROGRAM TO FIND DISTANCE FROM THE POINT
+
 function distance()
 {
     echo "Enter the value of x=";

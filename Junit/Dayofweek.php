@@ -14,6 +14,7 @@ function dayofWeek()
 	$x = $y1 + ($y1 / 4) - ($y1 / 100) + ($y1 / 400);
 	$m1 = $month + 12 * ((14 - $month) / 12) - 2;
 	$d1 = ($date + $x + (31 * $m1) / 12) % 7;
+	//switch case
     switch($d1)
 	{
 		case 0:
