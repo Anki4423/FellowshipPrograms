@@ -6,7 +6,7 @@
  * Description.
  *
  *
- * @see Function/method/class relied on
+ * @method constructor()
  * @global type $element,$high,$low,$mid
  * @global type $lengthofarray,$element_search
  *

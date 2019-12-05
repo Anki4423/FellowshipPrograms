@@ -1,5 +1,16 @@
-//TWO D ARRAY PROGRAM IN PHP
+
 <?php
+/**
+ * @author Ankita dudhe
+ * Description print twod array
+ * @globaltype $var,$var1
+ * 
+ */
+//TWO D ARRAY PROGRAM IN PHP
+/**
+ * @method function twodarray()
+ * @globaltype $row & $col variable for number of row ,column
+  */
 function twodarray() 
 {
     echo "Enter the number of row ";
@@ -7,20 +18,20 @@ function twodarray()
     echo "Enter the number of column ";
     fscanf(STDIN,"%d",$col);
     $arr=array();
-    for($i=0;$i<$row;$i++)
+    for($var=0;$var<$row;$var++)
     {
-         for($j=0;$j<$col;$j++)
+         for($var1=0;$var1<$col;$var1++)
          {
-             fscanf(STDIN," %d",$arr[$i][$j]);
+             fscanf(STDIN," %d",$arr[$var][$var1]);
          }
  
     }
     //for printing 2D arraylist
-    for($i=0;$i<$row;$i++)
+    for($var=0;$var<$row;$var++)
     {
-        for($j=0;$j<$col;$j++)
+        for($var1=0;$var1<$col;$var1++)
         {
-            echo " ".$arr[$i][$j];
+            echo " ".$arr[$var][$var1];
         }
         echo "\n";
     }

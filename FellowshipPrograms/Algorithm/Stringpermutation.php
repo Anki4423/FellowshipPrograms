@@ -1,9 +1,6 @@
-
+// PROGRAM FOR STRING PERMUTATION
 <?php 
-/**
- * @summary find how many combination makes using char within string
- * @globaltype 
- */
+// PHP program to print all  
 // permutations of a given string. 
 function permutation($str, $l, $r)
 {
@@ -17,12 +14,8 @@ function permutation($str, $l, $r)
         }
     }
 }
-/**
- * @description :swap the position here.
- * @globlaltype: $str
- * /
- 
-  function swap($a, $i, $j)
+//swap the position here.
+function swap($a, $i, $j)
 {
     $temp;
     $charArray = str_split($a);

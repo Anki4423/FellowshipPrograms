@@ -1,6 +1,5 @@
-
-<?php 
 // VENDING MACHINE PROGRAM IN PHP
+<?php 
 $value;
 $total=0;
 echo "Enter amount ";
