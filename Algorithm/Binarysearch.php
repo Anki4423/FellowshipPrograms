@@ -1,124 +1,102 @@
 <?php
 
 /**
+ * @author:Ankita Dudhe
  * Summary.search the perticular element 
- *
- * Description.
- *
- *
- * @method constructor()
  * @global type $element,$high,$low,$mid
  * @global type $lengthofarray,$element_search
  *
  */
 
 //BINARY SEARCH PROGRAM IN PHP
-/**
- * 
- * @param type $var Description.
- * @param type $var Optional. Description. Default.
- * @return type Description.
- */
-
-        
-    
-
 class BinarySearch 
 {
 
-    private $elements;
-    private $mid;
-    private $high;
-    private $low;
+    // private $elements;
+    public $mid;
+    public $high;
+    public $low;
+    public $n;
     private $lengthOfArray;
     public $element_search;
+    public $elements= array();
 
     /**
-     * 
-     * @param type $var Description.
-     * @param type $var Optional. Description. Default.
-     * @return type Description.
+     * @method:elementlist()
+     * @param:$low,$high,$n pass as argument
      */
-    function constructor()
+    public function elementlist()
     {
-        $elements[] = array();
-        echo "Enter array element";
-        fscanf(STDIN,"%d",$elements);
-        $n = sizeof($elements);
-        $this->sortArray();
-        $this->$low = 0;
-        $this->$high = $this->$n - 1; 
-        $this->search($this->enterSearchElement());
-    }
-
-    /**
-     * 
-     * @function sortArray(): sort element in assending order
-     */
-    function sortArray(){
-        $this->sort($this->$elements);
-        for($i=0;$i<$n-1;$i++)
+       
+        echo "Enter array element:";
+        fscanf(STDIN,"%d",$n);
+        for($i=0;$i<$n;$i++)
         {
-            for($j=$i+1;$j<$n-1;$j++)
-            {
-                if($this->$elements[$j]<$this->$elements[$i])
-                {
-                    $temp=$this->$elements[$i];
-                    $this->$elements[$i]=$this->$elements[$j];
-                    $this->$elements[$j]=$temp;
-                }
-            }
+            echo "Enter ".$i." element:";
+            fscanf(STDIN,"%d",$this->elements[$i]);
         }
+    
+        $this->low =  $this->elements[0];
 
+        $this->high =  $this->elements[$n-1];
+         echo  $this->low." i am low \n"; 
+        echo  $this->high." i am high \n"; 
+        $this->search($this->enterElement());
     }
 
+   
     /**
      * 
-     * @param type $var Description.
-     * @param type $var Optional. Description. Default.
+     * @method: function enterElement()
      * @return type $element_search
      */
-    function enterSearchElement(){
+    public function enterElement()
+    {
         echo "Enter the number you want to search ";
-        fscanf(STDIN,"%d", $element_search);
-        return $element_search;
+        fscanf(STDIN,"%d", $this->element_search);
+        
+        return  $this->element_search;
+        
     }
 
     /**
-     * 
-     * @param type $element_search Description.
-     * @return type Description.
+     * @method:function search()
+     * @param type $element_search pass as argument
+     * @return type search element
      */
-    function search($element_search){
-        $this->$element_search = $element_search;
-        $this->$mid = ( $this->$low + $this->$high )/2;
-        while($this->$low<=$this->$high)
+    public function search($elementsearch)
+    {
+        $this->element_search = $elementsearch;
+      
+       // echo $this->mid." mid \n";
+        while($this->low <= $this->high)
         {
+            $this->mid = (int)(($this->low + $this->high )/2);
             //check the left array
-            if($element_search<$this->$mid)
+            if($this->element_search < $this->mid)
             {
-                $this->$high=$this->$mid-1;
+                $this->high=$this->mid-1;
             }
             //check the right array
             else
             {
-                $this->$low=$this->$mid+1;
+                $this->low=$this->mid+1;
             }
-            echo $element_search. " number found ";
+             echo $this->element_search. " number found ";
         }
-        if($element_search==$this->mid)
+        if($this->element_search==$this->mid)
         {
-            echo $element_search. "number found ";
+            echo $this->element_search. "number found ";
         }
-        return ;
+        
     }
 
 }
 
 //create object of class Binarysearch
 $b1=new BinarySearch;
-$b1->constructor();
-$b1->sortArray();
-$b1->enterSearchElement();
+$b1->elementlist();
+// $b1->enterElement();
+// $b1-> search($element_search);
 
 ?>
