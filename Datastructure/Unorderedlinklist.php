@@ -34,6 +34,26 @@ class unorderedlist
          $this->size++;
         }
     }
+    function insertlast($data)
+    {
+        $lastnode=new Node($data);
+
+        if(self::$head==null)
+		{
+			self::$head=$lastnode;
+			$this->size++;
+		}
+		else
+		{
+			 $temp=self::$head;
+			while($temp->next!=null)
+			{
+				$temp=$temp->next;
+			}
+			$temp->next=$lastnode;
+			$this->size++;
+        }
+    }
     function display()
     {
         if(self::$head==null)
@@ -59,6 +79,8 @@ $l->insertfirst(10);
 $l->insertfirst(20);
 $l->insertfirst(30);
 $l->insertfirst(40);
+$l->insertlast(88);
 $l->display();
+
 
 ?>
