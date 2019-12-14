@@ -1,161 +1,199 @@
 <?php
-class Address
+//Address Book program
+class AddressBook
 {
-    public $FirstName;
-    public $LastName;
-    public $AccountDetails=array();
-    public $City;
-    public $State;
+    //declare the variables and arrays
+    public $firstname;
+    public $lastname;
+    public $address;
+    public $city;
+    public $state;
     public $zip;
-    public $MobileNo;
-    const LEAVING_MESSAGE="Your data successfully update";
-    //take user input 
-    public function newAccount()
-    {
-        echo "Enter your Last Name\n";
-        fscanf(STDIN,"%s\n",$this->LastName);
-        echo "Enter your First Name\n";
-        fscanf(STDIN,"%s\n",$this->FirstName);
-        echo "Enter your city\n";
-        fscanf(STDIN,"%s\n",$this->City);
-        echo "Enter your State\n";
-        fscanf(STDIN,"%s\n",$this->State);
-        echo "Enter your Zip number\n";
-        fscanf(STDIN,"%d\n",$this->zip);
-        echo "Enter your Mobile Number\n";
-        fscanf(STDIN,"%d\n",$this->MobileNo);
-         $this->creatAccount();
+    public $phone_number;
+    public $userarray;
+    public $account_array;
+    //constructor to initialize the variables and arrays
+    function __construct(){
+        $this->firstname=null;
+        $this->lastname=null;
+        $this->address=null;
+        $this->city=null;
+        $this->state=null;
+        $this->zip=null;
+        $this->phone_number=null;
+        $this->userarray=array();
+        $this->account_array=array();
     }
-    //create new account and store in address book
-    public function creatAccount()
-    {
-        $json=json_decode(file_get_contents("Address.json"),true);//convert json object into array
-        $this->AccountDetails=$json;//store json array
-        $Name=$this->LastName." ".$this->FirstName;
-        $this->AccountDetails[$Name]= array('FirstName'=>$this->FirstName,'LastName'=>$this->LastName,'city'=>$this->City,'State'=>$this->State,'Zip'=>$this->zip,'MobileNo'=>$this->MobileNo); 
-        
-        echo Address::LEAVING_MESSAGE;
-        $this->save();
+    //function to add new contact details from user input
+    function add(){
+        echo "Enter first name:\n";
+        fscanf(STDIN,"%s",$this->firstname);
+        echo "Enter last name:\n";
+        fscanf(STDIN,"%s",$this->lastname);
+        echo "Enter Address:\n";
+        fscanf(STDIN,"%s",$this->address);
+        echo "Enter City:\n";
+        fscanf(STDIN,"%s",$this->city);
+        echo "Enter State:\n";
+        fscanf(STDIN,"%s",$this->state);
+        echo "Enter Zip:\n";
+        fscanf(STDIN,"%d",$this->zip);
+        echo "Enter phone number:\n";
+        fscanf(STDIN,"%d",$this->phone_number);
+        //read the json file Address.json
+        $jsonfile=file_get_contents("Address.json");
+        $this->account_array=json_decode($jsonfile,true);
+        //store user entered details in userarray
+        $this->userarray=array("Firstname"=>$this->firstname,"Lastname"=>$this->lastname,"Address"=>$this->address,
+        "City"=>$this->city,"State"=>$this->state,"Zip"=>$this->zip,"PhoneNumber"=>$this->phone_number);
+        //push the entered details into account_array
+        array_push($this->account_array,$this->userarray);
     }
-    //Save Address book in json fromat
-    public function save()
+    //function to save updated details into json file
+    function save()
     {
-    $json=json_encode( $this->AccountDetails);//convert into json object
-    file_put_contents("Address.json",$json);//create file
+        $result=file_put_contents("Address.json",json_encode($this->account_array));
+        if(!$result){
+            echo "Nothing to print in AddressBook\n";
+        }
+        else{
+            echo "AddressBook Updated Successfully\n";
+        }
     }
-    //edit data according to user
-    public function edit()
-    {
-        echo "Enter your Last Name\n";
-        fscanf(STDIN,"%s\n",$this->LastName);
-        echo "Enter your First Name\n";
-        fscanf(STDIN,"%s\n",$this->FirstName);
-        $Name=$this->LastName." ".$this->FirstName;
-        $json=json_decode(file_get_contents("Address.json"),true);//convert json object into array
-        $this->AccountDetails=$json;//store json array
-        //if name found 
-        if($this->search($Name))
-        {
-            $array=$this->AccountDetails[$Name];//store data of $Name in $array
-            echo "\n1.Last name\n2.First name\n3.City\n4.zip\n5.State\n6.mobile no\n";
-            echo "enter your choice\n";
-            fscanf(STDIN,"%s\n",$choice);
-            switch($choice)
+    //function to edit the existing contact details
+    function edit(){
+        //read Address.json file
+        $jsonfile=file_get_contents("Address.json");
+        $this->account_array=json_decode($jsonfile,true);
+        echo "Enter first name whose details you want to edit:\n";
+        fscanf(STDIN,"%s",$first_name);
+        echo "Enter last name whose details you want to edit:\n";
+        fscanf(STDIN,"%s",$last_name);
+        //match name with all the contacts to edit
+        for($i=0;$i<count($this->account_array);$i++){
+            //if match found
+            if($first_name==$this->account_array[$i]["Firstname"] && $last_name==$this->account_array[$i]["Lastname"])
             {
-                case 1: echo "Enter your Last Name\n";
-                        fscanf(STDIN,"%s\n",$this->LastName);
-                        $array['LastName']=$this->LastName;
-                        unset($this->AccountDetails[$Name]);//delet array
-                        $Name=$this->LastName." ".$this->FirstName;
-                        break;
-                case 2: echo "Enter your First Name\n";
-                        fscanf(STDIN,"%s\n",$this->FirstName);
-                        $array['FirstName']=$this->FirstName;
-                        unset($this->AccountDetails[$Name]);//delet array
-                        $Name=$this->LastName." ".$this->FirstName;
-                        break;
-                case 3: echo "Enter your city\n";
-                        fscanf(STDIN,"%s\n",$this->City);
-                        $array['city']=$this->City;                      
-                        break;
-                case 4: echo "Enter your Zip number\n";
-                        fscanf(STDIN,"%d\n",$this->zip);
-                        $array['Zip']=$this->zip;                      
-                        break;
-                case 5: echo "Enter your State\n";
-                        fscanf(STDIN,"%s\n",$this->State);
-                        $array['State']=$this->State;
-                        break;
-                case 6: echo "Enter your Mobile Number\n";
-                        fscanf(STDIN,"%d\n",$this->MobileNo);
-                        $array['MobileNo']=$this->MobileNo;
-                        break;
+               echo "Which details do you want to edit?\n";
+               echo "Enter 1 for firstname\nEnter 2 for lastname\nEnter 3 for Address\nEnter 4 for City\nEnter 5 for State\nEnter 6 for Zip\nEnter 7 for PhoneNumber\n";
+               fscanf(STDIN,"%d",$choice);
+               switch($choice){
+                   case 1:
+                   echo "Enter new Firstname:\n";
+                   fscanf(STDIN,"%s",$new_firstname);
+                   $this->account_array[$i]["Firstname"]=$new_firstname;
+                   break;
+                   case 2:
+                   echo "Enter new Lastname:\n";
+                   fscanf(STDIN,"%s",$new_lastname);
+                   $this->account_array[$i]["Lastname"]=$new_lastname;
+                   break;
+                   case 3:
+                   echo "Enter new Address:\n";
+                   fscanf(STDIN,"%s",$new_address);
+                   $this->account_array[$i]["Address"]=$new_address;
+                   break;
+                   case 4:
+                   echo "Enter new City:\n";
+                   fscanf(STDIN,"%s",$new_city);
+                   $this->account_array[$i]["City"]=$new_city;
+                   break;
+                   case 5:
+                   echo "Enter new State:\n";
+                   fscanf(STDIN,"%s",$new_state);
+                   $this->account_array[$i]["State"]=$new_state;
+                   break;
+                   case 6:
+                   echo "Enter new Zip:\n";
+                   fscanf(STDIN,"%s",$new_zip);
+                   $this->account_array[$i]["Zip"]=$new_zip;
+                   break;
+                   case 7:
+                   echo "Enter new PhoneNumber:\n";
+                   fscanf(STDIN,"%s",$new_phone_number);
+                   $this->account_array[$i]["PhoneNumber"]=$new_phone_number;
+               }
+              
             }
-            $this->AccountDetails[$Name]=$array;//store change data at respective position
-            $this->save();
+            //if match does not found
+            else{
+                echo "Sorry Name does not Match\n";
+            }
         }
-        else
-        {
-            echo "name you type is not present in Addreesbook";
-        }
-
+        
     }
-    //Search data by fullname
-    public function search($name)
-    {
-        foreach($this->AccountDetails as $fullname=>$details)
-        {
-            if($fullname==$name)
-                return true;
+    //function to delete particular contact
+    function delete(){
+        //read Address.json file
+        $jsonfile=file_get_contents("Address.json");
+        $this->account_array=json_decode($jsonfile,true);
+        echo "Enter first name whose details you want to delete:\n";
+        fscanf(STDIN,"%s",$first_name);
+        echo "Enter last name whose details you want to delete:\n";
+        fscanf(STDIN,"%s",$last_name);
+        //match name with all the contacts
+        for($i=0;$i<count($this->account_array);$i++){
+            //if match found
+            if(($first_name==$this->account_array[$i]["Firstname"] )&& ( $last_name==$this->account_array[$i]["Lastname"])){
+               //use unset function to remove particular element
+               unset($this->account_array[$i]);
+               $temp=array_values($this->account_array);
+               //use array_values for re-indexing
+               $this->account_array=array_values($temp);
+            }
+            //if match not found
+            else{
+                echo "Sorry Name does not match\n";
+            }
         }
-        return false;
     }
-    //Delete Data that you want delete
-    public function delete()
+    //function to sort contacts by name in json file
+    function sortbyName()
     {
-        echo "Enter Last Name\n";
-        fscanf(STDIN,"%s\n",$this->LastName);
-        echo "Enter First Name\n";
-        fscanf(STDIN,"%s\n",$this->FirstName);
-        $Name=$this->LastName." ".$this->FirstName;
-        $json=json_decode(file_get_contents("Address.json"),true);//convert json object into array
-        $this->AccountDetails=$json;//store json array
-        if($this->search($Name))
-        {
-            unset($this->AccountDetails[$Name]);
-            $this->save();
-        }
-        else
-        {
-            echo "The given data not present in Address Book";
-        }
-        echo"\n" .Address::LEAVING_MESSAGE;
+        //read the Address.json file
+        $jsonfile=file_get_contents("Address.json");
+        $this->account_array=json_decode($jsonfile,true);
+        //use asort function to sort array by a value
+        asort($this->account_array);
+        print_r($this->account_array);
     }
-
-     
-}
-$object=new Address;
-$true=true;
-while($true)
-    {
-        echo "\n1.creat new\n2.Edit\n3.Delete\n4.Exit\n";
-        echo "enter your choice\n";
-        fscanf(STDIN,"%s\n",$choice);
     
-        switch($choice)
-        {
-            case 1:$object->newAccount();
-                    break;
-            case 2:$object->edit();
-                    break;
-            case 3:$object->delete();
-                    break;
-            
-            case 4:$true=false;
-                    break;
-            default:echo "Invalid choice\n";
-                    break;
-        }
+       
+}
+//create an object of class AddressBook
+$object=new AddressBook;
+$true=true;
+//while loop for user enter options
+while($true){
+    echo "Enter 1 to Add\nEnter 2 to save in AddressBook\nEnter 3 to Edit\nEnter 4 to Delete\nEnter 5 to Sort by Name\nEnter 6 to Exit\n";
+    fscanf(STDIN,"%d",$choice);
+    switch($choice){
+        //to add new contact
+        case 1:
+        $object->add();
+        break;
+        //to save update in json file 
+        case 2:
+        $object->save()
+        ;
+        break;
+        //to edit existing contacts
+        case 3:
+        $object->edit();
+        break;
+        //to delete particular contact 
+        case 4:
+        $object->delete();
+        break;
+        //to sort contacts by name
+        case 5:
+        $object->sortbyName();
+        break;
+      
+        //to exit the program
+        case 6:
+        exit(0);
+        echo "\n";
     }
-
+}
 ?>
